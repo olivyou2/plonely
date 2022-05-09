@@ -71,3 +71,5 @@ server.on('connection', (socket) => {
 });
 
 server.listen(SOCKETPORT);
+
+console.log(`Socket server listen on ${SOCKETPORT}`);
