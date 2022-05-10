@@ -13,8 +13,9 @@ const generateToken = (userId) => {
 
 const checkToken = (token) => {
   try {
-    return jwt.verify(token);
-  } catch {
+    return jwt.verify(token, JWTKEY);
+  } catch (error) {
+    console.log(error);
     throw new createHttpError.BadRequest(errors.JWT_EXPIRE);
   }
 };

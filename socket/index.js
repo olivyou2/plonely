@@ -6,12 +6,20 @@ const { renderingMap, createStructure, getStructure } = require('../service/map.
 const { getUser } = require('../service/user.service');
 const SessionHandler = require('./session/sessionHandler');
 
-const server = new Server();
+const server = new Server({
+  cors: {
+    origin: '*',
+  },
+});
 
 const sessionHandler = new SessionHandler();
 
 server.on('connection', (socket) => {
   let session;
+
+  socket.on('ping', () => {
+    socket.emit('pong');
+  });
 
   socket.on('group', async (accessToken) => {
     const payload = checkToken(accessToken);
@@ -23,31 +31,37 @@ server.on('connection', (socket) => {
     socket.emit('group', groups);
   });
 
-  socket.on('connect', async (accessToken) => {
+  socket.on('entrance', async (accessToken) => {
+    console.log(accessToken);
     const payload = checkToken(accessToken);
     const { userId } = payload;
 
     const user = await getUser(userId);
 
     session = sessionHandler.createSession();
-
     session.id = socket.id;
     session.x = user.x;
     session.y = user.y;
 
+    socket.emit('entranceSelf', sessionHandler.sessions, session);
+
     socket.join('game');
-    socket.to('game').emit('connect', session);
+    socket.to('game').emit('entrance', session);
   });
 
   socket.on('disconnect', () => {
-    sessionHandler.removeSession(session);
-    socket.to('game').emit('disconnect', session);
+    if (session) {
+      sessionHandler.removeSession(session);
+    }
+    socket.to('game').emit('exit', session);
   });
 
   socket.on('move', (x, y, time) => {
     session.x = x;
     session.y = y;
     session.time = time;
+
+    console.log(`${x} ${y}`);
 
     socket.to('game').emit('move', session);
   });
