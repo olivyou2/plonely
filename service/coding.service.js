@@ -1,15 +1,27 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-bitwise */
+<<<<<<< HEAD
+=======
+/**
+ *
+ * @param {String} str
+ */
+
+// a b c d e f g h A B C D E F G H
+>>>>>>> e604f348aec841e48904386637fe4b3e11111231
 
 const codes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
 
 const key = Buffer.from('ObMwnXZ');
 const keyLength = key.byteLength;
 
+<<<<<<< HEAD
 /**
  *
  * @param {String} str
  */
+=======
+>>>>>>> e604f348aec841e48904386637fe4b3e11111231
 const endecrypt = (str) => {
   const buffer = Buffer.from(str);
   const newBuffer = Buffer.alloc(buffer.byteLength);

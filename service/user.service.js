@@ -42,7 +42,7 @@ const loginUser = async (userId, password) => {
     throw new createHttpError.BadRequest(errors.USER_NOT_EXISTS);
   }
 
-  const token = generateToken(user.userId);
+  const token = generateToken(user.user);
   return {
     user,
     token,
