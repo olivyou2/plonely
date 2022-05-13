@@ -1,0 +1,6 @@
+Player Layer {
+    SocketId
+    UserId
+    
+    X, Y
+}

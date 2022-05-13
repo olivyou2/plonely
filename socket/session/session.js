@@ -4,23 +4,8 @@ class Session {
 
     this.x = 0;
     this.y = 0;
+
     this.time = 0;
-  }
-
-  getX() {
-    return this.x;
-  }
-
-  setX(x) {
-    this.x = x;
-  }
-
-  getY() {
-    return this.y;
-  }
-
-  setY(y) {
-    this.y = y;
   }
 
   getTime() {
@@ -45,6 +30,22 @@ class Session {
    */
   setSocketId(socketId) {
     this.socketId = socketId;
+  }
+
+  getX() {
+    return this.x;
+  }
+
+  getY() {
+    return this.y;
+  }
+
+  setX(x) {
+    this.x = x;
+  }
+
+  setY(y) {
+    this.y = y;
   }
 }
 

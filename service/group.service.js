@@ -16,7 +16,8 @@ const createGroup = async (userId) => {
 const getGroup = (groupId) => Group.findById(groupId);
 
 const findGroupContains = async (userId) => {
-  const groups = await Group.find({ 'members.$.user': userId });
+  console.log(userId);
+  const groups = await Group.find({ 'members.user': userId });
 
   return groups;
 };

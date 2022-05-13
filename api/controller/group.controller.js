@@ -2,6 +2,7 @@
 const express = require('express');
 const wrap = require('../../error/wrap');
 const { createGroup, findGroupContains } = require('../../service/group.service');
+const { getUser } = require('../../service/user.service');
 
 /**
  *
@@ -11,9 +12,13 @@ const { createGroup, findGroupContains } = require('../../service/group.service'
  */
 const createGroupRoute = async (req, res, next) => {
   const { userId } = req.body;
-  console.log(userId);
 
-  const group = await createGroup(userId);
+  const user = await getUser(userId);
+  if (!user) {
+    throw new Error("User doesn't exists");
+  }
+
+  const group = await createGroup(user.id);
   res.status(200).send({ group });
 };
 
