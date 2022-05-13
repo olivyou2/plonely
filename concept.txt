@@ -1,0 +1,51 @@
+서버 => {
+    -- Top Layer --
+        1. Session Layer
+            -> Socket Session 관리
+            -> UserID, SessionID 관리
+            -> Client 의 Session 계층과 대응됨
+            -> behaviour/session/*.js 로 이벤트 리스너 구현
+            -> 최초 접속한 Session 은 lobby.behaviour.js 로 처리!
+
+        2. Player Layer
+            -> Player Instance 관리
+            -> Client Logic 구현
+            -> Client 의 Player 계층과 대응됨
+            -> behaviour/player/*.js 로 이벤트 리스너 구현
+    -- Bottom Layer --
+    
+    레이어 behaviour 구현
+        -> 단순히 이름으로만 구분, 기능을 구현할 때 각 영역에서만 기능 구현하도록 함 
+        -> export -> listener (required) Listener 에 대한 처리 ...
+        -> export -> Internal Database API (optional) 내부 데이터베이스 접근 API
+        -> export -> Functional API (optional) 기능 API
+    
+}
+
+클라이언트 => {
+    -- Top Layer --
+        1. Session Layer
+            -> Socket Session 관리
+            -> Emits
+                Session Emit 은 Player Layer 까지 전파됨!
+            -> Network Emits
+                onEntranceSelf, # emit 한 connectRequest 의 Response
+                onEntrance, # 다른 세션의 입장
+                onExit, # 다른 세션의 퇴장
+                onDisable, # Session 이 Disable 됨 ( Render off )
+                onEnable, # Session 이 Enable 됨 ( Render on )
+                
+        2. Player Layer 
+            -> Player Instance 관리
+            -> Emits
+                Session Emit 에서 onEntrance, onEntranceSelf, onExit, onDisable, onEnable 전파됨
+                socket.io 에서 직접 listener 추가 가능
+            -> Network Emits
+                Socket.io 에서 직접 추가한 listener
+                ex) Move
+            -> Logic Emits
+                Session Layer 에서 전파된 Event
+
+}
+
+컨셉수정 -> 

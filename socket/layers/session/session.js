@@ -1,6 +1,7 @@
 class Session {
   constructor() {
     this.socketId = '';
+    this.userId = '';
 
     this.x = 0;
     this.y = 0;
@@ -29,6 +30,18 @@ class Session {
 
   setTime(time) {
     this.time = time;
+  }
+
+  getUserId() {
+    return this.userId;
+  }
+
+  /**
+   *
+   * @param {String} userId
+   */
+  setUserId(userId) {
+    this.userId = userId;
   }
 
   /**

@@ -4,7 +4,8 @@ const { findGroupContains } = require('../service/group.service');
 const { checkToken } = require('../service/jwt.service');
 const { renderingMap, createStructure, getStructure } = require('../service/map.service');
 const { getUser } = require('../service/user.service');
-const SessionHandler = require('./session/sessionHandler');
+const SessionHandler = require('./layers/session/sessionHandler');
+const loadBehaviour = require('./behaviour/index');
 
 const server = new Server({
   cors: {
@@ -14,12 +15,12 @@ const server = new Server({
 
 const sessionHandler = new SessionHandler();
 
-server.on('connection', (socket) => {
-  let session;
+loadBehaviour(server);
 
-  socket.on('ping', () => {
-    socket.emit('pong');
-  });
+server.on('connection', (socket) => {
+  socket.join('lobby');
+
+  let session;
 
   socket.on('group', async (accessToken) => {
     const payload = checkToken(accessToken);
@@ -32,18 +33,18 @@ server.on('connection', (socket) => {
   });
 
   socket.on('entrance', async (accessToken) => {
-    console.log(accessToken);
     const payload = checkToken(accessToken);
     const { userId } = payload;
 
     const user = await getUser(userId);
 
     session = sessionHandler.createSession();
+    session.setUserId(user.user);
     session.id = socket.id;
     session.x = user.x;
     session.y = user.y;
 
-    socket.emit('entranceSelf', sessionHandler.sessions, session);
+    socket.emit('entranceSelf', sessionHandler.sessions, session, socket.id);
 
     socket.join('game');
     socket.to('game').emit('entrance', session);
@@ -60,8 +61,6 @@ server.on('connection', (socket) => {
     session.x = x;
     session.y = y;
     session.time = time;
-
-    console.log(`${x} ${y}`);
 
     socket.to('game').emit('move', session);
   });

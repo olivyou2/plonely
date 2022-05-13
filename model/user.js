@@ -12,12 +12,12 @@ const schema = new Schema({
   x: {
     type: Number,
     required: true,
-    default: 0,
+    default: 400,
   },
   y: {
     type: Number,
     required: true,
-    default: 0,
+    default: 400,
   },
 });
 
